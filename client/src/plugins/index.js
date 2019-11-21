@@ -8,8 +8,23 @@
  * except in compliance with the MIT License.
  */
 
+ import React from 'react';
 import DeploymentTool from './deployment-tool';
 
+function yourPlugin({ subscribe }) {
+
+  React.useEffect(() => {
+    const sub = subscribe('show-privacy-preferences', () => {
+      alert('lol');
+    });
+
+    return sub;
+  }, []);
+
+  return null;
+}
+
 export default [
-  DeploymentTool
+  DeploymentTool,
+  yourPlugin
 ];

@@ -544,7 +544,7 @@ class MenuBuilder {
         getSeparatorTemplate(),
         {
           label: 'Privacy Preferences',
-          click: () => app.emit('menu:action', 'show-privacy-preferences')
+          click: () => app.emit('menu:action', 'emit-event', { type: 'show-privacy-preferences' })
         },
       ] : [],
       getSeparatorTemplate()
