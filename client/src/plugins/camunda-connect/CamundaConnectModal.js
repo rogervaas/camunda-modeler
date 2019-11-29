@@ -18,6 +18,17 @@ import css from './CamundaConnectModal.less';
 
 class CamundaConnectModal extends PureComponent {
 
+  renderClients = (clients) => {
+    if (!clients){
+      return null;
+    }
+    return clients.map((clientName) => {
+      return (
+        <div key={clientName}> {clientName} </div>
+      )
+    })
+  }
+
   onConnectButtonClicked = () => {
     const userName = document.getElementById('camundaConnectUserName').value;
     const serverURL = document.getElementById('camundaConnectServerURL').value;
@@ -29,9 +40,10 @@ class CamundaConnectModal extends PureComponent {
       onClose,
       serverPort,
       connecting,
-      connected
+      connected,
+      isServer,
+      clients
     } = this.props;
-    console.log(connected);
     return (
       <Modal className={ css.View } onClose={ onClose }>
         <Modal.Title>Camunda Connect</Modal.Title>
@@ -40,7 +52,13 @@ class CamundaConnectModal extends PureComponent {
           <div className="serverPortDiv">
             Server port: <b>{serverPort}</b>
           </div>
-          {(!connecting && !connected) &&
+          {
+            isServer && (
+              <div className="clients"> <b> This instance is used as a server. Connected clients: </b> </div>
+            )
+          }
+          {this.renderClients(clients)}
+          {(!isServer && !connecting && !connected) &&
             <div className="connectDiv">
               User name <br/>
               <input type="text" id="camundaConnectUserName" />
@@ -53,9 +71,9 @@ class CamundaConnectModal extends PureComponent {
               <button id="camundaConnectButton" onClick={this.onConnectButtonClicked}> Connect </button>
             </div>
           } {
-            connecting && <div className="connectingDiv"> Connecting </div>
+            (!isServer && connecting) && <div className="connectingDiv"> Connecting </div>
           } {
-            connected && <div className="connectingDiv"> <b> Connected </b> </div>
+            (!isServer && connected) && <div className="connectingDiv"> <b> Connected </b> </div>
           }
         </Modal.Body>
       </Modal>

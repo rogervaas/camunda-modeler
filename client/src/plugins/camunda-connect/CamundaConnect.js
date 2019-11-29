@@ -29,11 +29,21 @@ export default class CamundaConnect extends PureComponent {
       serverPortRead: false
     };
 
+    this.clients = new Object();
+
     props.getGlobal('backend').on('serverAcceptedRequest', () => {
       this.setState({
         connected: true,
         connecting: false
       });
+    });
+
+    props.getGlobal('backend').on('clientConnected', (sender, payload) => {
+      this.clients[payload] = true;
+      this.setState({
+        isServer: true,
+        clients: Object.keys(this.clients)
+      })
     });
   }
 
@@ -76,7 +86,9 @@ export default class CamundaConnect extends PureComponent {
       serverPortRead,
       modalOpen,
       connecting,
-      connected
+      connected,
+      isServer,
+      clients
     } = this.state;
 
     return <React.Fragment>
@@ -91,7 +103,7 @@ export default class CamundaConnect extends PureComponent {
       )
     }
     {modalOpen &&
-      <CamundaConnectModal connected={connected} connecting={connecting} onConnectRequest={this.onConnectRequest} onClose={this.onModalClose} serverPort={this.serverPort}/>
+      <CamundaConnectModal clients={clients} isServer={isServer} connected={connected} connecting={connecting} onConnectRequest={this.onConnectRequest} onClose={this.onModalClose} serverPort={this.serverPort}/>
     }
     </React.Fragment>;
   }

@@ -42,6 +42,7 @@ class CamundaConnectServer {
       this.userNamesByWS.set(ws, msgBody);
       this.log(msgBody + ' connected.');
       ws.send('hello');
+      this.send('clientConnected', "SDFDSF");
     }else if (msgHeader === 'hello') {
       this.log('Server accepted my request.');
       this.send('serverAcceptedRequest');

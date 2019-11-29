@@ -49,7 +49,7 @@ module.exports.on = on;
 
 function send() {
   var args = Array.prototype.slice.call(arguments);
-
+  console.log(args);
   app.mainWindow.webContents.send.apply(app.mainWindow.webContents, args);
 }
 
