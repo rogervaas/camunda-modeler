@@ -8,12 +8,4 @@
  * except in compliance with the MIT License.
  */
 
-import CamundaPlugin from './camunda-plugin';
-import PrivacyPreferences from './privacy-preferences';
-import CamundaConnect from './camunda-connect';
-
-export default [
-  CamundaPlugin,
-  PrivacyPreferences,
-  CamundaConnect
-];
+export { default } from './CamundaConnect';

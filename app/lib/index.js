@@ -35,6 +35,7 @@ const Menu = require('./menu');
 const Platform = require('./platform');
 const Plugins = require('./plugins');
 const Workspace = require('./workspace');
+const CamundaConnectServer = require('./camundaConnectServer');
 
 const {
   readFile,
@@ -538,6 +539,9 @@ function bootstrap() {
 
   // (6) plugins
   const pluginsDisabled = flags.get('disable-plugins');
+
+  // (7) camunda connect server
+  const camundaConnectServer = new CamundaConnectServer();
 
   let paths;
 

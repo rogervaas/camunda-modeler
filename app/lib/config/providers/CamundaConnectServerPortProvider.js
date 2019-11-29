@@ -8,12 +8,10 @@
  * except in compliance with the MIT License.
  */
 
-import CamundaPlugin from './camunda-plugin';
-import PrivacyPreferences from './privacy-preferences';
-import CamundaConnect from './camunda-connect';
+class CamundaConnectServerPortProvider {
+  get() {
+    return process.env.camundaConnectServerPort;
+  }
+}
 
-export default [
-  CamundaPlugin,
-  PrivacyPreferences,
-  CamundaConnect
-];
+module.exports = CamundaConnectServerPortProvider;
