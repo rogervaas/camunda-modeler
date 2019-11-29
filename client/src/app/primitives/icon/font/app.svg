@@ -55,6 +55,10 @@
 <glyph glyph-name="save-normal" unicode="&#xf422;" d="M558 650h84v-152h-84v152z m190 102h-639v-804h782v662l-143 142z m-454-58h397v-238h-397v238z m484-682h-556v311h556v-311z m-58 220h-440v39h440v-39z m0-45h-440v-39h440v39z m0-84h-440v-39h440v39z" horiz-adv-x="1000" />
 
 <glyph glyph-name="save-as" unicode="&#xf423;" d="M748 752h-639v-804h782v662l-143 142z m-105-114v-143h-80v143h80z m169-612h-624l0 648h125v-226h384v226h19l96-97v-551z m-85 63h-454v39h454v-39z m0 119h-454v-39h454v39z m0 80h-454v-39h454v39z" horiz-adv-x="1000" />
+
+<glyph glyph-name="camundaconnect" unicode="&#xe809;" d="M772 333l-741-412q-13-7-22-2t-9 20v822q0 14 9 20t22-2l741-412q13-7 13-17t-13-17z" horiz-adv-x="785.7" />
+
+
 </font>
 </defs>
 </svg>

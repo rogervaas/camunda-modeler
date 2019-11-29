@@ -10,6 +10,13 @@
 
 import React, { PureComponent } from 'react';
 
+import {
+  Button,
+  Icon
+} from '../../app/primitives';
+
+import { Fill } from '../../app/slot-fill';
+
 import ws from 'ws';
 
 export default class CamundaConnect extends PureComponent {
@@ -28,8 +35,24 @@ export default class CamundaConnect extends PureComponent {
     });
   }
 
+  onIconClicked() {
+
+  }
+
   render(){
-    return null;
+    const {
+      serverPortRead
+    } = this.state;
+
+    return <React.Fragment>
+      <Fill slot="toolbar" group="9_camundaconnect">
+        <Button
+          onClick={ this.onIconClicked }
+          title="Camunda Connect">
+          <Icon name="camundaconnect" />
+        </Button>
+      </Fill>
+    </React.Fragment>;
   }
 
 }
