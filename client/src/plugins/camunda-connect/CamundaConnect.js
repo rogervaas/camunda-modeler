@@ -60,6 +60,21 @@ export default class CamundaConnect extends PureComponent {
         })
       }
     });
+
+    props.getGlobal('backend').on('syncXML', (sender, payload) => {
+      window.events.emit('camundaConnect.syncFromAnotherInstance', {
+        xml: payload
+      });
+    });
+
+    window.events.on('camundaConnect.sync', (payload) => {
+      const xml = payload.xml;
+      this.props.getGlobal('backend').send('camundaConnect:sync', {
+        isServer: this.state.isServer,
+        connected: this.state.connected,
+        xml: xml
+      });
+    });
   }
 
   async componentDidMount() {

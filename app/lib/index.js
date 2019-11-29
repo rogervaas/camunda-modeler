@@ -133,6 +133,10 @@ renderer.on('camundaConnect:disconnect', function(props) {
   camundaConnectServer.disconnect(userName);
 });
 
+renderer.on('camundaConnect:sync', function(props) {
+  camundaConnectServer.sync(props.isServer, props.connected, props.xml);
+});
+
 // dialogs //////////
 
 renderer.on('dialog:open-files', async function(options, done) {

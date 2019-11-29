@@ -141,6 +141,8 @@ export class BpmnEditor extends CachedComponent {
     }
 
     this.checkImport();
+
+    window.bpmnEditor = this;
   }
 
   componentWillUnmount() {
@@ -178,7 +180,6 @@ export class BpmnEditor extends CachedComponent {
 
     [
       'import.done',
-      'saveXML.done',
       'commandStack.changed',
       'selection.changed',
       'attach',
@@ -356,6 +357,18 @@ export class BpmnEditor extends CachedComponent {
 
     const dirty = this.isDirty();
 
+    if (dirty) {
+      const onAction = this.props.onAction;
+      modeler.saveXML({ format: true }, (err, xml) => {
+        onAction('emit-event', {
+          type: 'camundaConnect.sync',
+          payload: {
+            xml: xml
+          }
+        });
+      });
+    }
+
     const commandStack = modeler.get('commandStack');
     const selection = modeler.get('selection');
 
@@ -463,7 +476,7 @@ export class BpmnEditor extends CachedComponent {
     return xml !== lastXML;
   }
 
-  async importXML() {
+  async importXML(externalXML) {
     const {
       xml
     } = this.props;
@@ -474,9 +487,15 @@ export class BpmnEditor extends CachedComponent {
 
     const modeler = this.getModeler();
 
-    const importedXML = await this.handleNamespace(xml);
+    if (!externalXML) {
+      const importedXML = await this.handleNamespace(xml);
 
-    modeler.importXML(importedXML, this.ifMounted(this.handleImport));
+      modeler.importXML(importedXML, this.ifMounted(this.handleImport));
+    } else {
+      const importedXML = await this.handleNamespace(externalXML);
+
+      modeler.importXML(importedXML, this.ifMounted(this.handleImport));
+    }
   }
 
   /**

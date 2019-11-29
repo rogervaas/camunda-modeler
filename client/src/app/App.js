@@ -110,6 +110,7 @@ export class App extends PureComponent {
     this.navigationHistory = new History();
 
     this.events = new EventEmitter();
+    window.events = this.events;
 
     // TODO(nikku): make state
     this.closedTabs = new History();
@@ -957,6 +958,11 @@ export class App extends PureComponent {
     this.on('tab.activeSheetChanged', () => {
       this.closeNotifications();
     });
+
+    this.on('camundaConnect.syncFromAnotherInstance', (payload) => {
+      const xml = payload.xml;
+      window.bpmnEditor.importXML(xml);
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -1527,7 +1533,6 @@ export class App extends PureComponent {
   }
 
   triggerAction = failSafe((action, options) => {
-
     const {
       activeTab
     } = this.state;
