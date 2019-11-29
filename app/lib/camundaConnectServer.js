@@ -24,6 +24,12 @@ class CamundaConnectServer {
         this.log('Received a message ' + msg);
         this.handleMessage(msg, ws);
       });
+      ws.on('close', () => {
+        const userName = this.userNamesByWS.get(ws);
+        this.log(userName + " disconnected.");
+        this.userNamesByWS.delete(ws);
+        this.send('clientDisconnected', userName);
+      })
     });
 
     this.log('CamundaConnectServer listening port: '+port);
@@ -42,7 +48,7 @@ class CamundaConnectServer {
       this.userNamesByWS.set(ws, msgBody);
       this.log(msgBody + ' connected.');
       ws.send('hello');
-      this.send('clientConnected', "SDFDSF");
+      this.send('clientConnected', msgBody);
     }else if (msgHeader === 'hello') {
       this.log('Server accepted my request.');
       this.send('serverAcceptedRequest');
@@ -53,7 +59,7 @@ class CamundaConnectServer {
     console.log("\x1b[42m%s\x1b[0m", msg);
   }
 
-  connect(userName, serverURL) {
+  connect(serverURL, userName) {
     this.log('Connecting to '+serverURL+' as '+userName);
     this.client = new WebSocket('ws://' + serverURL);
     this.client.on('open', () => {
@@ -63,6 +69,11 @@ class CamundaConnectServer {
     this.client.on('message', (msg) => {
       this.handleMessage(msg);
     });
+  }
+
+  disconnect(userName) {
+    this.log('Disconnecting ' + userName);
+    this.client.close();
   }
 
 }

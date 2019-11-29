@@ -45,6 +45,21 @@ export default class CamundaConnect extends PureComponent {
         clients: Object.keys(this.clients)
       })
     });
+
+    props.getGlobal('backend').on('clientDisconnected', (sender, payload) => {
+      delete this.clients[payload];
+      if (Object.keys(this.clients).length === 0) {
+        this.setState({
+          isServer: false,
+          clients: null
+        });
+      } else {
+        this.setState({
+          isServer: true,
+          clients: Object.keys(this.clients)
+        })
+      }
+    });
   }
 
   async componentDidMount() {
@@ -60,7 +75,7 @@ export default class CamundaConnect extends PureComponent {
     });
   }
 
-  onConnectRequest = (serverURL, userName) => {
+  onConnectRequest = (userName, serverURL) => {
     const {
       getGlobal
     } = this.props;
@@ -73,11 +88,23 @@ export default class CamundaConnect extends PureComponent {
       serverURL: serverURL,
       userName: userName
     });
+
+    this.userName = userName;
   };
 
   onModalClose = () => {
     this.setState({
       modalOpen: false
+    });
+  }
+
+  onDisconnect = () => {
+    this.props.getGlobal('backend').send('camundaConnect:disconnect', {
+      userName: this.userName
+    });
+    this.setState({
+      connected: false,
+      connecting: false
     });
   }
 
@@ -103,7 +130,7 @@ export default class CamundaConnect extends PureComponent {
       )
     }
     {modalOpen &&
-      <CamundaConnectModal clients={clients} isServer={isServer} connected={connected} connecting={connecting} onConnectRequest={this.onConnectRequest} onClose={this.onModalClose} serverPort={this.serverPort}/>
+      <CamundaConnectModal onDisconnect={this.onDisconnect} clients={clients} isServer={isServer} connected={connected} connecting={connecting} onConnectRequest={this.onConnectRequest} onClose={this.onModalClose} serverPort={this.serverPort}/>
     }
     </React.Fragment>;
   }

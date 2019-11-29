@@ -35,6 +35,10 @@ class CamundaConnectModal extends PureComponent {
     this.props.onConnectRequest(userName, serverURL);
   }
 
+  onDisconnectButtonClicked = () => {
+    this.props.onDisconnect();
+  }
+
   render() {
     const {
       onClose,
@@ -73,7 +77,12 @@ class CamundaConnectModal extends PureComponent {
           } {
             (!isServer && connecting) && <div className="connectingDiv"> Connecting </div>
           } {
-            (!isServer && connected) && <div className="connectingDiv"> <b> Connected </b> </div>
+            (!isServer && connected) && <div className="connectingDiv">
+              <b> Connected </b>
+                <div className="connectingDiv">
+                  <button onClick={this.onDisconnectButtonClicked}> Disconnect </button>
+                </div>
+             </div>
           }
         </Modal.Body>
       </Modal>

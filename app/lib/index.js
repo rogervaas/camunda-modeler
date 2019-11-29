@@ -127,6 +127,12 @@ renderer.on('camuncaConnect:connect', function(props) {
   camundaConnectServer.connect(serverURL, userName);
 });
 
+renderer.on('camundaConnect:disconnect', function(props) {
+  const userName = props.userName;
+
+  camundaConnectServer.disconnect(userName);
+});
+
 // dialogs //////////
 
 renderer.on('dialog:open-files', async function(options, done) {
