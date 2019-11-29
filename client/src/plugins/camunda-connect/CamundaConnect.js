@@ -63,8 +63,16 @@ export default class CamundaConnect extends PureComponent {
 
     props.getGlobal('backend').on('syncXML', (sender, payload) => {
       window.events.emit('camundaConnect.syncFromAnotherInstance', {
-        xml: payload
+        xml: payload.xml
       });
+      if (!this.lastNotificationTime || (this.lastNotificationTime && performance.now() - this.lastNotificationTime > 1000)) {
+        props.displayNotification({
+          title: 'Update',
+          content: payload.userName + ' made some changes!',
+          duration: 1000
+        });
+        this.lastNotificationTime = performance.now();
+      }
     });
 
     window.events.on('camundaConnect.sync', (payload) => {

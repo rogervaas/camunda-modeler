@@ -37,7 +37,7 @@ class CamundaConnectServer {
           const userName = parsed.userName;
           const xml = parsed.xml;
           this.log("syncing from "+userName);
-          this.send('syncXML', xml);
+          this.send('syncXML', {xml: xml, userName: userName});
         }
       });
       ws.on('close', () => {
@@ -100,7 +100,7 @@ class CamundaConnectServer {
         const userName = parsed.userName;
         const xml = parsed.xml;
         this.log("syncing from "+userName);
-        this.send('syncXML', xml);
+        this.send('syncXML', {xml: xml, userName: userName});
       }
     });
   }
