@@ -17,7 +17,9 @@ import {
 
 import { Fill } from '../../app/slot-fill';
 
-import ws from 'ws';
+import ConnectIcon from 'icons/Connect.svg';
+
+import CamundaConnectModal from './CamundaConnectModal';
 
 export default class CamundaConnect extends PureComponent {
 
@@ -26,6 +28,13 @@ export default class CamundaConnect extends PureComponent {
     this.state = {
       serverPortRead: false
     };
+
+    props.getGlobal('backend').on('serverAcceptedRequest', () => {
+      this.setState({
+        connected: true,
+        connecting: false
+      });
+    });
   }
 
   async componentDidMount() {
@@ -35,23 +44,55 @@ export default class CamundaConnect extends PureComponent {
     });
   }
 
-  onIconClicked() {
+  onIconClicked = () => {
+    this.setState({
+      modalOpen: true
+    });
+  }
 
+  onConnectRequest = (serverURL, userName) => {
+    const {
+      getGlobal
+    } = this.props;
+
+    this.setState({
+      connecting: true
+    });
+
+    getGlobal('backend').send('camuncaConnect:connect', {
+      serverURL: serverURL,
+      userName: userName
+    });
+  };
+
+  onModalClose = () => {
+    this.setState({
+      modalOpen: false
+    });
   }
 
   render(){
     const {
-      serverPortRead
+      serverPortRead,
+      modalOpen,
+      connecting,
+      connected
     } = this.state;
 
     return <React.Fragment>
-      <Fill slot="toolbar" group="9_camundaconnect">
-        <Button
-          onClick={ this.onIconClicked }
-          title="Camunda Connect">
-          <Icon name="camundaconnect" />
-        </Button>
-      </Fill>
+    {serverPortRead && (
+        <Fill slot="toolbar" group="9_camundaconnect">
+          <Button
+            onClick={ this.onIconClicked }
+            title="Camunda Connect">
+            <ConnectIcon />
+          </Button>
+        </Fill>
+      )
+    }
+    {modalOpen &&
+      <CamundaConnectModal connected={connected} connecting={connecting} onConnectRequest={this.onConnectRequest} onClose={this.onModalClose} serverPort={this.serverPort}/>
+    }
     </React.Fragment>;
   }
 

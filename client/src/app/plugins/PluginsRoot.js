@@ -88,6 +88,7 @@ export default class PluginsRoot extends PureComponent {
             subscribe={ subscribe }
             log={ this.log }
             displayNotification={ this.displayNotification }
+            getGlobal={ app.getGlobal }
           />
         </PluginParent>
       );

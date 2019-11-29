@@ -67,7 +67,8 @@ const {
   files,
   flags,
   menu,
-  plugins
+  plugins,
+  camundaConnectServer
 } = bootstrap();
 
 app.flags = flags;
@@ -115,6 +116,15 @@ renderer.on('external:open-url', function(options) {
   const url = options.url;
 
   browserOpen(url);
+});
+
+
+// camunda connect server //////////
+renderer.on('camuncaConnect:connect', function(props) {
+  const serverURL = props.serverURL;
+  const userName = props.userName;
+
+  camundaConnectServer.connect(serverURL, userName);
 });
 
 // dialogs //////////
@@ -541,7 +551,7 @@ function bootstrap() {
   const pluginsDisabled = flags.get('disable-plugins');
 
   // (7) camunda connect server
-  const camundaConnectServer = new CamundaConnectServer();
+  const camundaConnectServer = new CamundaConnectServer(renderer.send);
 
   let paths;
 
@@ -567,7 +577,8 @@ function bootstrap() {
     files,
     flags,
     menu,
-    plugins
+    plugins,
+    camundaConnectServer
   };
 }
 
