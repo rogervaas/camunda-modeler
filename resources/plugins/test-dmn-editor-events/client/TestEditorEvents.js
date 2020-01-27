@@ -100,7 +100,7 @@ function addModule(extensionModule) {
 
   return (config) => {
 
-    const additionalModules = config.additionalModules || [];
+    const additionalModules = config.drd.additionalModules || [];
 
     return {
       ...config,
