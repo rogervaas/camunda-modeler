@@ -22,7 +22,7 @@ import DmnModelerExtension from './dmn-modeler-extension';
  * - hook into <tab.saved> to perform a post-safe action
  *
  */
-export default class TestEditorEvents extends PureComponent {
+export default class TestDMNEditorEvents extends PureComponent {
 
   constructor(props) {
 
