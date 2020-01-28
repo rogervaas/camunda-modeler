@@ -15,7 +15,7 @@
     "plugin"
   ],
   "devDependencies": {
-    "camunda-modeler-plugin-helpers": "^3.1.0",
+    "camunda-modeler-plugin-helpers": "^3.4.0-alpha.1",
     "npm-run-all": "^4.1.5",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.10"
