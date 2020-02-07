@@ -39,6 +39,8 @@ import {
 
 import diagramXML from './diagram.dmn';
 
+import diagram11XML from './diagram11.dmn';
+
 const { spy } = sinon;
 
 
@@ -905,6 +907,7 @@ describe('<DmnEditor>', function() {
 
   });
 
+
   describe('sheet change', function() {
 
     it('should switch active view on sheet change', async function() {
@@ -922,6 +925,7 @@ describe('<DmnEditor>', function() {
     });
 
   });
+
 
   describe('import', function() {
 
@@ -1298,6 +1302,64 @@ describe('<DmnEditor>', function() {
 
   });
 
+
+  describe('#handleMigration', function() {
+
+    it('should migrate to DMN 1.3', function(done) {
+
+      // given
+      const onAction = sinon.stub().withArgs('show-dialog').resolves({
+        button: 'yes'
+      });
+
+      const onContentUpdated = sinon.spy();
+
+      function onImport() {
+        try {
+
+          // then
+          expect(onContentUpdated).to.be.calledOnce;
+          expect(onContentUpdated).to.be.calledOnceWith(sinon.match('dmndi:DMNDI'));
+
+          done();
+        } catch (error) {
+          done(error);
+        }
+      }
+
+      // when
+      renderEditor(diagram11XML, {
+        onAction,
+        onContentUpdated,
+        onImport
+      });
+    });
+
+
+    it('shoud NOT migrate to DMN 1.3', function(done) {
+
+      // given
+      const onAction = sinon.stub();
+
+      onAction.withArgs('show-dialog').onFirstCall().resolves({
+        button: 'cancel'
+      });
+
+      onAction.withArgs('close-tab').onFirstCall().callsFake(function() {
+        done();
+      });
+
+      const onContentUpdated = sinon.spy();
+
+      // when
+      renderEditor(diagram11XML, {
+        onAction,
+        onContentUpdated
+      });
+    });
+
+  });
+
 });
 
 
@@ -1312,11 +1374,13 @@ async function renderEditor(xml, options = {}) {
     layout,
     onAction,
     onChanged,
+    onContentUpdated,
     onError,
     onImport,
     onLayoutChanged,
     onModal,
     onSheetsChanged,
+    getConfig,
     getPlugins
   } = options;
 
@@ -1326,12 +1390,14 @@ async function renderEditor(xml, options = {}) {
       xml={ xml }
       activeSheet={ options.activeSheet || { id: 'dmn' } }
       onAction={ onAction || noop }
+      onContentUpdated={ onContentUpdated || noop }
       onChanged={ onChanged || noop }
       onError={ onError || noop }
       onImport={ onImport || noop }
       onLayoutChanged={ onLayoutChanged || noop }
       onModal={ onModal || noop }
       onSheetsChanged={ onSheetsChanged || noop }
+      getConfig={ getConfig || (() => {}) }
       getPlugins={ getPlugins || (() => []) }
       cache={ options.cache || new Cache() }
       layout={ layout || {
