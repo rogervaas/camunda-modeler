@@ -1876,7 +1876,9 @@ describe('<App>', function() {
 
       // given
       const showSpy = spy(_ => {
-        return 'ok';
+        return {
+          button: 'ok'
+        };
       });
 
       const dialog = new Dialog({

@@ -245,9 +245,9 @@ export class App extends PureComponent {
       return tab;
     }
 
-    const answer = await this.showDialog(getContentChangedDialog());
+    const { button } = await this.showDialog(getContentChangedDialog());
 
-    if (answer === 'ok') {
+    if (button === 'ok') {
       const updatedFile = await fileSystem.readFile(file.path);
 
       return this.updateTab(tab, {
